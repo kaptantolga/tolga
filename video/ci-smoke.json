@@ -1,0 +1,20 @@
+{
+  "cikti": "cikti/ci-smoke.mp4",
+  "gecis": 0.2,
+  "sahneler": [
+    {
+      "gorsel": "../template/assets/hero.jpg",
+      "metin": ["CI smoke", "sahnesi bir"],
+      "ses": "ses/1.mp3",
+      "marka": "CI",
+      "yon": "iler"
+    },
+    {
+      "gorsel": "../template/assets/g-3.jpg",
+      "metin": ["CI smoke sahnesi iki"],
+      "ses": "ses/2.mp3",
+      "marka": "CI",
+      "yon": "geri"
+    }
+  ]
+}

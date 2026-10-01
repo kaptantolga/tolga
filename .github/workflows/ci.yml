@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  # ---------------------------------------------------------------
+  # Web şablonu testleri (jsdom ile 54 kontrol)
+  # ---------------------------------------------------------------
+  web-tests:
+    name: Web şablonu (jsdom)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: test/package-lock.json
+
+      - name: Bağımlılıkları kur
+        run: npm ci
+
+      - name: Testleri çalıştır
+        run: npm test
+
+  # ---------------------------------------------------------------
+  # Video pipeline smoke-render (reel.py gerçekten video üretiyor mu)
+  # ---------------------------------------------------------------
+  video-tests:
+    name: Reel smoke-render
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: video
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Bağımlılıkları kur
+        run: pip install imageio-ffmpeg pillow numpy
+
+      - name: reel.py sözdizimi
+        run: python -m py_compile reel.py
+
+      - name: Kısa render (ci-smoke.json)
+        run: python reel.py ci-smoke.json
+
+      - name: Çıktı spesifikasyonunu doğrula
+        run: |
+          FF=$(python -c "import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())")
+          "$FF" -hide_banner -i cikti/ci-smoke.mp4 2>&1 | tee /tmp/probe.txt
+          grep -q "1080x1920" /tmp/probe.txt
+          grep -q "h264" /tmp/probe.txt
+          grep -q "aac" /tmp/probe.txt
+          echo "✅ 1080x1920 + h264 + aac doğrulandı"
