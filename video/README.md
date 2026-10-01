@@ -3,7 +3,8 @@
 İşletmeler için **gerçek MP4 reklam videosu** üreten pipeline.
 Fotoğraf + metin + Türkçe seslendirme → 1080×1920 (9:16), 30fps, H.264 Reel.
 
-Örnek çıktı: `cikti/ada-ruzgari-reel.mp4` (~21 sn).
+Örnek çıktı (git'te, her zaman indirilebilir): `ada-ruzgari-reel.mp4` (~21 sn).
+Çalışma çıktısı: `cikti/` (git'te yok).
 
 ---
 
